@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Database
+*.sqlite3
+*.db
+
+# Virtual environment
+venv/
+env/
+
+# Development-related
+*.log
+local_settings.py
+
+# Site-specific files
+/staticfiles/
+.media/
+
+# Configuration files
+*.ini
+*.conf
+
+# Dependency directories
+/lib/
+/lib64/
+/bin/
+/build/
+/*.egg-info/
+/dist/
+/node_modules/
+
+# Editor-specific
+.vscode/
+.idea/
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore PyCharm files
+*.iml
+.idea/
