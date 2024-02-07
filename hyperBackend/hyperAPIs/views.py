@@ -1,47 +1,60 @@
-from django.shortcuts import render
-from django.contrib.auth.models import Group, User
-from rest_framework import permissions, viewsets
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
-from hyperAPIs.models import Contact
-from hyperAPIs.serializers import ContactSerializer
 
-from .serializers import GroupSerializer, UserSerializer
-
-# Create your views here.
-@csrf_exempt
-def api_list(request):
-    """
-    List all code Contacts, or create a new Contact.
-    """
-    if request.method == 'GET':
-        apivar = Contact.objects.all()
-        serializer = ContactSerializer(apivar, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = ContactSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+from .serializers import ContactSerializer, UsersSerializer
+from .models import Contact, Users
+from allauth.account.views import SignupView , LoginView , LogoutView 
+from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView, RetrieveAPIView
+from rest_framework.permissions import AllowAny
+from django.http import JsonResponse
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+class ContactList(ListAPIView):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
+    permission_classes = [AllowAny]  
+
+class ContactCreate(CreateAPIView):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
+    permission_classes = [AllowAny]  
+
+class ContactRetrieve(RetrieveAPIView):
+    lookup_field = 'id'
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer 
+    permission_classes = [AllowAny]  
+
+class ContactUpdate(UpdateAPIView):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
+    lookup_field = 'id'
+    permission_classes = [AllowAny] 
+
+class ContactDestroy(DestroyAPIView):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
+    lookup_field = 'id'
+    permission_classes = [AllowAny] 
 
 
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# user related views
+
+class UserList(ListAPIView):
+    queryset = Users.objects.all()
+    serializer_class = UsersSerializer
+    permission_classes = [AllowAny] 
+    
+class CustomSignupView(SignupView):  
+    permission_classes = [AllowAny] 
+    def form_valid(self, form):
+        print("user request", form)
+        response = super().form_valid(form)
+        return response
+
+    def get_response_data(self, user):
+        return {'message': 'User registered successfully'}
+
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        return response
+

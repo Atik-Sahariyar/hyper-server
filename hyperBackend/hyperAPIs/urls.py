@@ -1,6 +1,19 @@
 from django.urls import path
 from hyperAPIs import views
+import allauth.account.views 
+
 
 urlpatterns = [
-    path('contacts/', views.api_list),
-]
+    # Contacts
+    path('contacts/', views.ContactList.as_view(), name='contact-list'),
+    path('contacts/create/', views.ContactCreate.as_view(), name='contact-create'),
+    path('contacts/<int:id>/', views.ContactRetrieve.as_view(), name='contact-retrieve'),
+    path('contacts/update/<int:id>/', views.ContactUpdate.as_view(), name='contact-update'),
+    path('contacts/delete/<int:id>/', views.ContactDestroy.as_view(), name='contact-delete'),
+
+    # Users
+    path('users/', views.UserList.as_view(), name='user-list'),
+    
+    # Authentication with django-allauth
+    
+]  
