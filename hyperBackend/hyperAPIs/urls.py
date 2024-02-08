@@ -13,6 +13,9 @@ urlpatterns = [
 
     # Users
     path('users/', views.UserList.as_view(), name='user-list'),
+    path('users/post/', views.UserPost.as_view(), name='user-post'),
+    path('users/<str:email>/', views.UserRetrieve.as_view(), name='user-retrive'),
+    path('users/update/<str:email>', views.UserUpdate.as_view(), name='user-update'),
     
     # Authentication with django-allauth
     
