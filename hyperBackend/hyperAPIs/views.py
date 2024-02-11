@@ -1,8 +1,10 @@
 
 from .serializers import ContactSerializer, UsersSerializer
-from .models import Contact, Users
+from .models import Contact
 from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny
+from dj_rest_auth.registration.views import RegisterView
+from rest_framework.response import Response
 
 
 class ContactList(ListAPIView):
@@ -33,29 +35,3 @@ class ContactDestroy(DestroyAPIView):
     lookup_field = 'id'
     permission_classes = [AllowAny] 
 
-
-# user related views
-
-class UserList(ListAPIView):
-    queryset = Users.objects.all()
-    serializer_class = UsersSerializer
-    permission_classes = [AllowAny] 
-
-class UserPost(CreateAPIView):
-    queryset = Users.objects.all()
-    serializer_class = UsersSerializer
-    permission_classes = [AllowAny] 
-
-
-class UserRetrieve(RetrieveAPIView):
-    lookup_field = 'email'
-    queryset = Users.objects.all()
-    serializer_class = UsersSerializer 
-    permission_classes = [AllowAny]  
-    
-    
-class UserUpdate(UpdateAPIView):
-    lookup_field = 'email'
-    queryset = Users.objects.all()
-    serializer_class = UsersSerializer 
-    permission_classes = [AllowAny]  
